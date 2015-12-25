@@ -61,9 +61,9 @@ minetest.register_on_joinplayer(function(player) -- Holds place for the monitor
 	player:hud_add({
 		hud_elem_type = "text",
 		id = "1",
-		position = {x=1, y=0.2},
+		position = {x=1, y=0.15},
 		text = "",
-		number = 0xFF5533,
+		number = 0xFF0000,
 		item = 0,
 		size = {x=1, y=1},
 		offset = { x = -200, y = 0}

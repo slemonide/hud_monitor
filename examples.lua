@@ -37,7 +37,23 @@ function print_player_data()
 		local player_name = player:get_player_name()
 		local ip = minetest.get_player_ip(player_name)
 		hud_monitor.place("Your ip is " .. ip, "ip", player)
-		
+
+		-- Shows player height above sea level
+		local sea_level = minetest.get_mapgen_params().water_level
+		local elevation_sea = math.ceil(pos.y - sea_level)
+		local wording = {"above", "below"}
+		local word = ""
+		if elevation_sea == 0 then
+			local text = "You are at the sea level."
+			hud_monitor.place(text, "sea_level", player)
+			break
+		elseif elevation_sea > 0 then
+			word = wording[1]
+		else
+			word = wording[2]
+		end
+		local text = "You are " .. math.abs(elevation_sea) .. " blocks " .. word .. " sea level"
+		hud_monitor.place(text, "sea_level", player)
 	end
 	minetest.after(0.5, print_player_data)
 end
