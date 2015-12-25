@@ -1,3 +1,5 @@
+local EXAMPLES = true
+
 hud_monitor = {}
 hud_monitor.text = {} -- contains all widgets
 hud_monitor.text.all = {} -- widgets that all players see the same way
@@ -35,7 +37,9 @@ end
 function hud_monitor.place(text, id, player)
 	if player then
 		if id then
-			hud_monitor.text.user[player] = {} -- Need to fix this garbage
+			if not hud_monitor.text.user[player] then
+				hud_monitor.text.user[player] = {}
+			end
 			hud_monitor.text.user[player][id] = text
 		else
 			table.insert(hud_monitor.text.user, text)
@@ -57,7 +61,7 @@ minetest.register_on_joinplayer(function(player) -- Holds place for the monitor
 	player:hud_add({
 		hud_elem_type = "text",
 		id = "1",
-		position = {x=1, y=0.1},
+		position = {x=1, y=0.2},
 		text = "",
 		number = 0xFF5533,
 		item = 0,
@@ -66,3 +70,8 @@ minetest.register_on_joinplayer(function(player) -- Holds place for the monitor
 	})
 	hud_monitor.update(player) -- Update monitor for each new player
 end)
+
+if EXAMPLES then
+	modpath = minetest.get_modpath("hud_monitor") -- Some examples
+	dofile(modpath .. "/examples.lua")
+end
