@@ -6,7 +6,40 @@ function sec_to_human(seconds) -- This is confusing
 	local minutes = minutes_total % 60 -- this is < 60
 	local days_total = math.floor(hours_total / 24)
 	local days = hours_total % 24
-	local string = days .. " days, " .. hours .. " hours,\n " .. minutes .. " minutes and " .. seconds .. " seconds"
+
+	-- day or days?
+	local d_or_ds = ""
+	if days == 1 then
+		d_or_ds = " day "
+	else
+		d_or_ds = " days "
+	end
+
+	-- hour or hours?
+	local h_or_hs = ""
+	if hours == 1 then
+		h_or_hs = " hour "
+	else
+		h_or_hs = " hours "
+	end
+
+	-- minute or minutes?
+	local m_or_ms = ""
+	if minutes == 1 then
+		m_or_ms = " minute "
+	else
+		m_or_ms = " minutes "
+	end
+
+	-- second or seconds?
+	local s_or_ss = ""
+	if seconds == 1 then
+		s_or_ss = " second"
+	else
+		s_or_ss = " seconds"
+	end
+
+	local string = days .. d_or_ds .. hours .. h_or_hs .. "\n" .. minutes .. m_or_ms .. "and " .. seconds .. s_or_ss
 	return string 
 end
 
@@ -23,15 +56,11 @@ function print_player_data()
 		-- Detect on what node the player stands
 		local below = {x=pos.x,y=pos.y-1,z=pos.z}
 		local node_name = minetest.get_node(below).name
-		hud_monitor.place("You are standing on " .. node_name, "ground", player)
+		hud_monitor.place("You are standing on:\n" .. node_name, "ground", player)
 
 		-- Detect in what node the player stands
 		local node_name = minetest.get_node(pos).name
-		hud_monitor.place("You are in " .. node_name, "air", player)
-
-		-- Writes how old the world is
-		local age = sec_to_human(minetest.get_gametime())
-		hud_monitor.place("This world is " .. age .. " old", "age", player)
+		hud_monitor.place("You are in the " .. node_name, "air", player)
 
 		-- Write player's ip address
 		local player_name = player:get_player_name()
@@ -55,6 +84,20 @@ function print_player_data()
 		local text = "You are " .. math.abs(elevation_sea) .. " blocks " .. word .. " sea level"
 		hud_monitor.place(text, "sea_level", player)
 	end
+
+	-- Writes how old the world is
+	local age = sec_to_human(minetest.get_gametime())
+	hud_monitor.place("This world is " .. age .. " old", "age")
+
+	-- Shows real time
+	local time = os.date("%T")
+	hud_monitor.place("Real time is " .. time, "time")
+
+	-- Shows real date
+	local date = os.date("%D")
+	hud_monitor.place("Real date is " .. date, "date")
+
 	minetest.after(0.5, print_player_data)
 end
 minetest.after(0.5, print_player_data)
+
