@@ -1,5 +1,5 @@
 local EXAMPLES = true
-local ID = 1
+local ID = "HUD Monitor"
 
 hud_monitor = {}
 hud_monitor.text = {} -- contains all widgets
@@ -68,7 +68,7 @@ minetest.register_on_joinplayer(function(player) -- Holds place for the monitor
 		scale = {x=200, y=200},
 --		item = 0,
 --		size = {x=1, y=1},
-		offset = { x = -130, y = 600}
+		offset = { x = -130, y = 400}
 	})
 	hud_monitor.update(player) -- Update monitor for each new player
 end)

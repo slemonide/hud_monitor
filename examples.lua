@@ -2,7 +2,7 @@ function sec_to_human(seconds) -- This is confusing
 	local minutes_total = math.floor(seconds / 60)
 	local seconds = seconds % 60 -- this is < 60
 	local hours_total = math.floor(minutes_total / 60)
-	local hours = minutes_total % 60
+	local hours = hours_total % 60
 	local minutes = minutes_total % 60 -- this is < 60
 	local days_total = math.floor(hours_total / 24)
 	local days = hours_total % 24
@@ -39,7 +39,18 @@ function sec_to_human(seconds) -- This is confusing
 		s_or_ss = " seconds"
 	end
 
-	local string = days .. d_or_ds .. hours .. h_or_hs .. "\n" .. minutes .. m_or_ms .. "and " .. seconds .. s_or_ss
+	local string = ""
+	if days ~= 0 then
+		string = days .. d_or_ds
+	end
+	if hours ~= 0 then
+		string = string .. hours .. h_or_hs .. "\n"
+	end
+	if minutes ~= 0 then
+		string = string .. "\n" .. minutes .. m_or_ms .. "and "
+	end
+
+	local string = string .. seconds .. s_or_ss
 	return string 
 end
 
@@ -62,10 +73,12 @@ function print_player_data()
 		local node_name = minetest.get_node(pos).name
 		hud_monitor.place("You are in the " .. node_name, "air", player)
 
-		-- Write player's ip address
-		local player_name = player:get_player_name()
-		local ip = minetest.get_player_ip(player_name)
-		hud_monitor.place("Your ip is " .. ip, "ip", player)
+		-- Write player's ip address (only in multiplayer)
+		if not minetest.is_singleplayer() then
+			local player_name = player:get_player_name()
+			local ip = minetest.get_player_ip(player_name)
+			hud_monitor.place("Your ip is " .. ip, "ip", player)
+		end
 
 		-- Shows player height above sea level
 		local sea_level = minetest.get_mapgen_params().water_level
@@ -89,6 +102,8 @@ function print_player_data()
 	local age = sec_to_human(minetest.get_gametime())
 	hud_monitor.place("This world is " .. age .. " old", "age")
 
+	-- Show time only in singleplayer mode (to avoid timezones problems)
+if minetest.is_singleplayer() then
 	-- Shows real time
 	local time = os.date("%T")
 	hud_monitor.place("Real time is " .. time, "time")
@@ -96,6 +111,7 @@ function print_player_data()
 	-- Shows real date
 	local date = os.date("%D")
 	hud_monitor.place("Real date is " .. date, "date")
+end
 
 	minetest.after(0.5, print_player_data)
 end
