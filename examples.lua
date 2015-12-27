@@ -44,7 +44,7 @@ function sec_to_human(seconds) -- This is confusing
 		string = days .. d_or_ds
 	end
 	if hours ~= 0 then
-		string = string .. hours .. h_or_hs .. "\n"
+		string = string .. hours .. h_or_hs
 	end
 	if minutes ~= 0 then
 		string = string .. "\n" .. minutes .. m_or_ms .. "and "
