@@ -5,7 +5,7 @@ function sec_to_human(seconds) -- This is confusing
 	local hours = hours_total % 60
 	local minutes = minutes_total % 60 -- this is < 60
 	local days_total = math.floor(hours_total / 24)
-	local days = hours_total % 24
+	local days = days_total % 24
 
 	-- day or days?
 	local d_or_ds = ""
